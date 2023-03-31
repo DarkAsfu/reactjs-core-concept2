@@ -1,31 +1,48 @@
 import logo from './logo.svg';
 import './App.css';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 function App() {
   
   return (
     <div className="App">
-      <Counter></Counter>
+      <ExternelUsers></ExternelUsers>
     </div>
   );
 }
-function Counter() {
-  const [count, setCount] = useState(1);
-  const incraseCount = ()=>{
-    setCount(count+1);
-  }
-  const decreaseCount = () => setCount(count-1);
+const styleA = {
+  border: '2px solid gray',
+  margin: '20px',
   
-  // const incraseCount = ()=>{
-  //   const newCount = count+1;
-  //   setCount(newCount);
-  // } 
+}
+function ExternelUsers () {
+  // step 1
+  const [users, setUsers] = useState([]);
+  // useEffect(()=>{}, [])
+  // Step 2
+  useEffect(()=>{
+    // step 3
+    fetch('https://jsonplaceholder.typicode.com/users')
+    .then(res => res.json())
+    // step 4 connect with state
+    .then(data => setUsers(data));
+  }, [])
   return (
     <div>
-      <h1>Count: {count}</h1>
-      <button onClick={incraseCount}>Increase</button>
-      <button onClick={decreaseCount}>Decrease</button>
+      <h2>External users</h2>
+      <p>{users.length}</p>
+      {
+        // step 5 -- show data using map
+        users.map(user => <User name={user.name} email={user.email}></User>)
+      }
+    </div>
+  )
+}
+function User(props){
+  return (
+    <div style={styleA}>
+      <h3>Name: {props.name}</h3>
+      <p>Email: {props.email}</p>
     </div>
   )
 }
